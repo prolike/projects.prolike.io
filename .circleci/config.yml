@@ -1,22 +1,46 @@
+
 version: 2
 jobs:
 
-  integrate:
+  prep-repo:
+    working_directory: /app
+    # The primary container is an instance of the first list image listed.
+    # Your commands in context of this container.
     docker:
-      - image: circleci/node:8.10
+      - image: lakruzz/play:latest
+        environment:
+          PLAY_USER_NAME:    Circle CI by @Prolike
+          PLAY_USER_EMAIL:   circleci@prolike.io
     steps:
       - checkout
       - run:
-          name: Environment
+          name: Describe the Environment
           command: |
             git --version
             env | sort | grep "CIRCLE"
+            pwd
+            ls -a
+            git rev-parse --short HEAD
       - run:
-          name: Intro
-          command: ./play --manuscript .circleci/manuscript.yml --part gitintro
+          name: If triggered by a tag, make sure it's annotated.
+          command: '[[ -z "$CIRCLE_TAG" ]] && echo "Not triggered by a tag" || git cat-file -p `git rev-parse $CIRCLE_TAG` | grep "^tag $CIRCLE_TAG$"'
+
       - run:
-          name: Swap to target branch and test integration
-          command: ./play --manuscript .circleci/manuscript.yml --part integrate
+          name: Introduce the user to the git repo, to prepare for delivery
+          command: play --manuscript .circleci/play-proflow-cci-gh.yml --part git_set_user
+      - run:
+          name: If we're on a ready branch then integrate
+          command: |
+            export IS_READY=`printenv CIRCLE_BRANCH | grep -e "ready\/*" && echo TRUE || echo ""`
+            printenv IS_READY
+            [[ -z "$IS_READY" ]] && echo Not a ready branch || play --manuscript .circleci/play-proflow-cci-gh.yml --part integrate
+      - run:
+          name: Create version.txt
+          command: play --manuscript .circleci/play-proflow-cci-gh.yml --part write-version-to-file
+      - save_cache:
+          key: the-repo-{{.Revision}}
+          paths:
+            - .
 
   jekyll-build:
     working_directory: /app
@@ -29,27 +53,53 @@ jobs:
       - run:
           name: Build Jekyll
           command: |
-            jekyll build --config _config.yml
+            export JEKYLL_PARAMS=`printenv CIRCLE_BRANCH | grep -e "^master$" && echo "--config _config.yml,_stage_config.yml" || echo ""`
+            printenv JEKYLL_PARAMS
+            jekyll build $JEKYLL_PARAMS
+      - run:
+          name: Log the version
+          command: cp version.txt _site/version.txt
       - save_cache:
           key: the-built-repo-{{ .Revision }}
           paths:
             - _site
             - .circleci
 
-  deliver:
+  html-proofer:
+    working_directory: /app
     docker:
-      - image: circleci/node:8.10
+      - image: 18fgsa/html-proofer
     steps:
-      - checkout
+      - restore_cache:
+          keys:
+            - the-built-repo-{{ .Revision }}
       - run:
-          name: Intro
-          command: ./play --manuscript .circleci/manuscript.yml --part gitintro
+          name: Htmlproofer
+          command: htmlproofer --disable-external --allow-hash-href --checks-to-ignore ImageCheck _site
+
+  html-proofer-extended:
+    working_directory: /app
+    docker:
+      - image: 18fgsa/html-proofer
+    steps:
+      - restore_cache:
+          keys:
+            - the-built-repo-{{ .Revision }}
       - run:
-          name: integrate
-          command: ./play --manuscript .circleci/manuscript.yml --part integrate
+          name: Htmlproofer
+          command: htmlproofer --allow-hash-href  --enforce-https  --check-favicon --check-opengraph --report-missing-names --report-invalid-tags  -- _site
+
+  deliver:
+    working_directory: /app
+    docker:
+      - image: lakruzz/play:latest
+    steps:
+      - restore_cache:
+          keys:
+            - the-repo-{{ .Revision }}
       - run:
           name: Deliver
-          command: ./play --manuscript .circleci/manuscript.yml --part deliver
+          command: play --manuscript .circleci/play-proflow-cci-gh.yml --part deliver
 
   deploy_dev:
     docker:
@@ -64,35 +114,58 @@ jobs:
           name: Deploy to dev
           command: sudo ./firebase-deploy/node_modules/.bin/firebase deploy --only hosting -P development --token=$FIREBASE_TOKEN
 
+
 workflows:
   version: 2
-  projectsProlikeIo:
+  Proflow:
     jobs:
-      - integrate:
+      - prep-repo:
           filters:
             tags:
               only: /.*/
             branches:
               only: /.*/
       - jekyll-build:
-          requires:
-            - integrate
+          requires: # Create the thing to deploy
+            - prep-repo
           filters:
             tags:
               only: /.*/
             branches:
               only: /.*/
-      - deliver:
+      - html-proofer: # Verify that the thing to deploy is good
           requires:
+            - prep-repo
             - jekyll-build
           filters:
-             branches:
-               only:
-                - /ready\/.+/
-      - deploy_dev: # Staging
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - html-proofer-extended: # Run more tests in parallel
           requires:
+            - prep-repo
             - jekyll-build
           filters:
-             branches:
-               only:
-                 - /master/
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - deliver: # Push the target branch to remote - only when all is good and only on ready branches
+          requires:
+            - prep-repo
+            - jekyll-build
+            - html-proofer
+          filters:
+            branches:
+              only:
+                - /ready\/.*/
+      - deploy_dev:
+          requires:
+            - prep-repo
+            - jekyll-build
+            - html-proofer
+          filters:
+            branches:
+              only:
+                - /master/
