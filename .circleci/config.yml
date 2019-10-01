@@ -39,16 +39,19 @@ jobs:
             - .circleci
 
   deliver:
-    working_directory: /app
     docker:
-      - image: lakruzz/play:latest
+      - image: circleci/node:8.10
     steps:
-      - restore_cache:
-          keys:
-            - the-repo-{{ .Revision }}
+      - checkout
+      - run:
+          name: Intro
+          command: ./play --manuscript .circleci/manuscript.yml --part gitintro
+      - run:
+          name: integrate
+          command: ./play --manuscript .circleci/manuscript.yml --part integrate
       - run:
           name: Deliver
-          command: play --manuscript /.circleci/play-proflow-cci-gh.yml --part deliver
+          command: ./play --manuscript .circleci/manuscript.yml --part deliver
 
   deploy_dev:
     docker:
@@ -88,4 +91,4 @@ workflows:
           filters:
              branches:
                only:
-                - master
+                 - /master/
