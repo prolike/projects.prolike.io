@@ -80,16 +80,16 @@ workflows:
                 - /ready\/.+/
       - jekyll-build
       - deliver:
-        requires:
-          - jekyll-build
+          requires:
+            - jekyll-build
           filters:
-            branches:
-              only:
+             branches:
+               only:
                 - /ready\/.+/
       - deploy_dev: # Staging
           requires:
             - jekyll-build
           filters:
-              branches:
-                only:
-                  - master
+             branches:
+               only:
+                - master
