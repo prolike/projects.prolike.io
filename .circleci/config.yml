@@ -51,6 +51,12 @@ jobs:
           keys:
             - the-repo-{{ .Revision }}
       - run:
+          name: configure bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+      - run:
           name:  Build "stage" or "production".
           command: |
             [[ -z "$CIRCLE_TAG" ]] && export JEKYLL_ENV=stage || export JEKYLL_ENV=production
@@ -64,7 +70,7 @@ jobs:
           paths:
             - _site
             - .circleci
-    
+
 
 
   html-proofer:
