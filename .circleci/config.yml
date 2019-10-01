@@ -106,18 +106,10 @@ jobs:
 
   deploy_dev:
     docker:
-      - image: circleci/node:8.10
+      - image: lakruzz/jekyll-plus:1.0.1
     steps:
-      - run:
-          name: Describe the Environment
-          command: |
-            git --version
-            env | sort | grep "CIRCLE"
-            pwd
-            ls -a
-            git rev-parse --short HEAD
       - restore_cache:
-          key: the-built-repo-{{ .Revision }}{{ .BuildNum }}
+          key: the-built-repo-{{ .Revision }}
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
