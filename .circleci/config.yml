@@ -75,19 +75,12 @@ workflows:
             branches:
               only:
                 - /ready\/.+/
-<<<<<<< HEAD
-      - jekyll-build
-      - deliver:
-        requires:
-          - jekyll-build
-=======
       - jekyll-build:
           requires:
             - integrate
       - deliver:
           requires:
             - jekyll-build
->>>>>>> a6aa6a2510c9f068f6764bc505d05e1aca2b787e
           filters:
              branches:
                only:
