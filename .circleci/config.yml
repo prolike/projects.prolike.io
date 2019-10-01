@@ -48,8 +48,8 @@ jobs:
             - the-repo-{{ .Revision }}
       - run:
           name: Deliver
-          command: play --manuscript .circleci/play-proflow-cci-gh.yml --part deliver
-          
+          command: play --manuscript /.circleci/play-proflow-cci-gh.yml --part deliver
+
   deploy_dev:
     docker:
       - image: circleci/node:8.10
