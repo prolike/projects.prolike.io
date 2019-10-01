@@ -17,41 +17,29 @@ jobs:
       - run:
           name: Swap to target branch and test integration
           command: ./play --manuscript .circleci/manuscript.yml --part integrate
-  
-  build:
-    <<: *defaults
+
+  jekyll-build:
+    working_directory: /app
     docker:
-      - image: circleci/ruby:2.5
-    environment:
-      BUNDLE_PATH: ~/repo/vendor/bundle
+      - image: lakruzz/jekyll-plus:1.0.1
     steps:
-      - checkout
       - restore_cache:
           keys:
-            - rubygems-v1-{{ checksum "Gemfile.lock" }}
-            - rubygems-v1-fallback
+            - the-repo-{{ .Revision }}
       - run:
-          name: Bundle Install
-          command: bundle check || bundle install
-      - save_cache:
-          key: rubygems-v1-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-      - run:
-          name: Jekyll build
-          command: bundle exec jekyll build
-      - run:
-          name: HTMLProofer tests
+          name: Build Jekyll
           command: |
-            bundle exec htmlproofer ./_site \
-              --allow-hash-href \
-              --check-favicon  \
-              --check-html \
-              --disable-external
-      - persist_to_workspace:
-          root: ./
+            export JEKYLL_PARAMS=`printenv CIRCLE_BRANCH | grep -e "^master$" && echo "--config _config.yml,_stage_config.yml" || echo ""`
+            printenv JEKYLL_PARAMS
+            jekyll build $JEKYLL_PARAMS
+      - run:
+          name: Log the version
+          command: cp version.txt _site/version.txt
+      - save_cache:
+          key: the-built-repo-{{ .Revision }}
           paths:
             - _site
+            - .circleci
 
   deliver:
     docker:
@@ -89,16 +77,18 @@ workflows:
           filters:
             branches:
               only:
-                - /ready\/.+/ 
-      - build
+                - /ready\/.+/
+      - jekyll-build
       - deliver:
+        requires:
+          - jekyll-build
           filters:
             branches:
               only:
-                - /ready\/.+/ 
+                - /ready\/.+/
       - deploy_dev: # Staging
           requires:
-            - build
+            - jekyll-build
           filters:
               branches:
                 only:
