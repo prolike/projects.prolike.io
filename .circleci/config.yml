@@ -78,7 +78,11 @@ workflows:
             branches:
               only:
                 - /ready\/.+/
+<<<<<<< HEAD
       - jekyll-build
+=======
+      - build
+>>>>>>> 55a537814cf85f0d40b1e12085b215d34f602a97
       - deliver:
         requires:
           - jekyll-build
