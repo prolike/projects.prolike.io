@@ -103,9 +103,8 @@ jobs:
           command: play --manuscript .circleci/play-proflow-cci-gh.yml --part deliver
 
   deploy_dev:
-    working_directory: /app
     docker:
-      - image: circleci/node:8.10
+      - image: lakruzz/play:latest
     steps:
       - attach_workspace:
           at: .
