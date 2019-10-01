@@ -64,8 +64,10 @@ jobs:
           paths:
             - _site
             - .circleci
+      - persist_to_workspace:
+          paths:
+            - _site
 
-  
 
   html-proofer:
     working_directory: /app
@@ -106,10 +108,10 @@ jobs:
 
   deploy_dev:
     docker:
-      - image: lakruzz/jekyll-plus:1.0.1
+      - image: circleci/node:8.10
     steps:
-      - restore_cache:
-          key: the-built-repo-{{ .Revision }}
+      - attach_workspace:
+          at: /app/_site
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
