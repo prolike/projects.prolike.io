@@ -116,6 +116,9 @@ jobs:
       - image: circleci/node:8.10
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - the-repo-{{ .Revision }}
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
