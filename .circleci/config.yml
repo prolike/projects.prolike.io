@@ -78,15 +78,17 @@ workflows:
             branches:
               only:
                 - /ready\/.+/
-      - build
+      - jekyll-build
       - deliver:
+        requires:
+          - jekyll-build
           filters:
             branches:
               only:
                 - /ready\/.+/
       - deploy_dev: # Staging
           requires:
-            - build
+            - jekyll-build
           filters:
               branches:
                 only:
