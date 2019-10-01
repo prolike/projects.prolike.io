@@ -106,8 +106,6 @@ jobs:
     docker:
       - image: circleci/node:8.10
     steps:
-      - attach_workspace:
-          at: .
       - run:
           command: echo "Hello ${CIRCLE_WORKING_DIRECTORY}"
       - run:
