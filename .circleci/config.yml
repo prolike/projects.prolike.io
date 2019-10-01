@@ -64,10 +64,7 @@ jobs:
           paths:
             - _site
             - .circleci
-      - persist_to_workspace:
-          root: /_site
-          paths:
-            - .
+    
 
 
   html-proofer:
@@ -112,8 +109,6 @@ jobs:
     docker:
       - image: circleci/node:8.10
     steps:
-      - attach_workspace:
-          at: /_site
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
