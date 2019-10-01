@@ -87,7 +87,7 @@ jobs:
             - the-built-repo-{{ .Revision }}
       - run:
           name: Htmlproofer
-          command: htmlproofer --allow-hash-href  --enforce-https  --check-favicon --check-opengraph --report-missing-names --report-invalid-tags  -- _site
+          command: htmlproofer --allow-hash-href  --enforce-https  --check-opengraph --report-missing-names --report-invalid-tags  -- _site
 
   deliver:
     working_directory: /app
