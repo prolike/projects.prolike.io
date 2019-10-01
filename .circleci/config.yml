@@ -105,13 +105,13 @@ jobs:
           command: play --manuscript .circleci/play-proflow-cci-gh.yml --part deliver
 
   deploy_dev:
-    working_directory: /app
+    working_directory: /app/_site
     docker:
       - image: circleci/node:8.10
     steps:
       - restore_cache:
           keys:
-            - the-built-repo-
+            - the-built-repo-{{ .Revision }}
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
