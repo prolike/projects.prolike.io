@@ -65,6 +65,7 @@ jobs:
             - _site
             - .circleci
       - persist_to_workspace:
+          root: .
           paths:
             - _site
 
