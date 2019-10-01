@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "projects-prolike"
+    "default": "projects-prolike",
+    "development": "projects-prolike"
   }
 }
