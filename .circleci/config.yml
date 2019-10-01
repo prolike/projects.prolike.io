@@ -32,9 +32,6 @@ jobs:
             export JEKYLL_PARAMS=`printenv CIRCLE_BRANCH | grep -e "^master$" && echo "--config _config.yml,_stage_config.yml" || echo ""`
             printenv JEKYLL_PARAMS
             jekyll build $JEKYLL_PARAMS
-      - run:
-          name: Log the version
-          command: cp version.txt _site/version.txt
       - save_cache:
           key: the-built-repo-{{ .Revision }}
           paths:
@@ -80,20 +77,25 @@ workflows:
                 - /ready\/.+/
 <<<<<<< HEAD
       - jekyll-build
-=======
-      - build
->>>>>>> 55a537814cf85f0d40b1e12085b215d34f602a97
       - deliver:
         requires:
           - jekyll-build
+=======
+      - jekyll-build:
+          requires:
+            - integrate
+      - deliver:
+          requires:
+            - jekyll-build
+>>>>>>> a6aa6a2510c9f068f6764bc505d05e1aca2b787e
           filters:
-            branches:
-              only:
+             branches:
+               only:
                 - /ready\/.+/
       - deploy_dev: # Staging
           requires:
             - jekyll-build
           filters:
-              branches:
-                only:
-                  - master
+             branches:
+               only:
+                - master
