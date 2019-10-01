@@ -110,6 +110,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll-auth
+  rake
 
 BUNDLED WITH
    2.0.2
