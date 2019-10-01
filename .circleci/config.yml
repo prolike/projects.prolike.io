@@ -109,6 +109,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          command: echo "Hello ${CIRCLE_WORKING_DIRECTORY}"
+      - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
       - run:
