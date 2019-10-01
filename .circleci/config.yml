@@ -72,12 +72,18 @@ workflows:
     jobs:
       - integrate:
           filters:
+            tags:
+              only: /.*/
             branches:
-              only:
-                - /ready\/.+/
+              only: /.*/
       - jekyll-build:
           requires:
             - integrate
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
       - deliver:
           requires:
             - jekyll-build
