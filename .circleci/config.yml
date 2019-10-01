@@ -104,12 +104,10 @@ jobs:
 
   deploy_dev:
     docker:
-      - image: lakruzz/play:latest
+      - image: circleci/node:8.10
     steps:
       - attach_workspace:
           at: .
-      - run:
-          command: echo "Hello $PWD"
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
