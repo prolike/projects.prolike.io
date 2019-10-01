@@ -110,7 +110,7 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - the-built-repo-{{ .Revision }}
+            - the-built-repo-
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
