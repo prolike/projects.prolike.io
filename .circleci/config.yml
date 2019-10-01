@@ -108,6 +108,7 @@ jobs:
     docker:
       - image: circleci/node:8.10
     steps:
+      - checkout
       - run:
           name: Describe the Environment
           command: |
