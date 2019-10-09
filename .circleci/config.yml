@@ -51,18 +51,11 @@ jobs:
           keys:
             - the-repo-{{ .Revision }}
       - run:
-          name: configure bundler
-          command: |
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
-            bundle install
-      - run:
           name:  Build "stage" or "production".
           command: |
             [[ -z "$CIRCLE_TAG" ]] && export JEKYLL_ENV=stage || export JEKYLL_ENV=production
             printenv JEKYLL_ENV
-            bundle exec jekyll-auth build
+            jekyll build
       - run:
           name: Log the version
           command: cp version.txt _site/version.txt
