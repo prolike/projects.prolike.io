@@ -28,6 +28,15 @@ firebase.initializeApp(firebaseConfig);
 <!-- Costum scripts -->
 <script>
 
+  if (user) {
+    document.querySelector("#signinButton").style() = "display: none;"
+  }
+  else {
+    document.querySelector("#signoutButton").style() = "display: none;"
+
+  }
+
+  function githubSignin(){
   var provider = new firebase.auth.GithubAuthProvider();
   provider.addScope('repo');
 
@@ -64,6 +73,7 @@ firebase.initializeApp(firebaseConfig);
   var credential = error.credential;
   // ...
   });
+}
 
   function githubSignout(){
      firebase.auth().signOut()
