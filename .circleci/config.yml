@@ -115,9 +115,6 @@ jobs:
     docker:
       - image: circleci/node:8.10
     steps:
-      - restore_cache:
-          keys:
-            - the-built-repo-{{ .Revision }}
       - run:
           name: Install Firebase Tools
           command: sudo npm install --prefix=./firebase-deploy firebase-tools
