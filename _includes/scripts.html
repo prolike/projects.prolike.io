@@ -28,15 +28,9 @@ firebase.initializeApp(firebaseConfig);
 <!-- Costum scripts -->
 <script>
 
-var user = null;
 
-  if (user) {
-    document.querySelector("#signinButton").style() = "display: none;"
-  }
-  else {
-    document.querySelector("#signoutButton").style() = "display: none;"
 
-  }
+
 
   function githubSignin(){
   var provider = new firebase.auth.GithubAuthProvider();
@@ -63,6 +57,17 @@ var user = null;
   var userEmail = document.querySelector("#user-email");
   userEmail.innerHTML = user.email;
 
+  var request = new XMLHttpRequest()
+
+  request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
+  request.onload = function() {
+    // Begin accessing JSON data here
+    var data = JSON.parse(this.response)
+
+    console.log(data);
+  }
+
+  request.send()
 
   // ...
   }).catch(function(error) {
@@ -86,4 +91,6 @@ var user = null;
         console.log('Signout failed')
      });
   }
+
+
 </script>
