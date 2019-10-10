@@ -174,7 +174,7 @@ firebase.initializeApp(firebaseConfig);
 
   var request = new XMLHttpRequest()
 
-  request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
+  request.open('GET', 'https://api.zenhub.io/', true)
   request.onload = function() {
     // Begin accessing JSON data here
     var data = JSON.parse(this.response)
