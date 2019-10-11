@@ -170,11 +170,21 @@ firebase.initializeApp(firebaseConfig);
   // appending the user email address
 
   exports.getFileSha = function (filePath, callback) {
+<<<<<<< HEAD
+=======
+    var api = fs.readFileSync("settings/api/github.json");
+    var apiObject = JSON.parse(api);
+
+>>>>>>> 991dc81ba15e79f486937265163bc26bd05b47b9
     var url = "https://api.github.com/repos/";
     var data = {
         method: "GET",
         headers: {
+<<<<<<< HEAD
             'Authorization': 'token ' + token,
+=======
+            'Authorization': 'token ' + apiObject.github_api_key,
+>>>>>>> 991dc81ba15e79f486937265163bc26bd05b47b9
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
@@ -189,7 +199,10 @@ firebase.initializeApp(firebaseConfig);
         .then(function (myJson) {
             var filesha = myJson.sha;
             callback(filesha);
+<<<<<<< HEAD
             console.log(data);
+=======
+>>>>>>> 991dc81ba15e79f486937265163bc26bd05b47b9
         })
         .catch(function (error) {
             logger.error('Error in gettings file sha with error: ' + error);
