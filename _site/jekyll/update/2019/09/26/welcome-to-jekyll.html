@@ -180,7 +180,7 @@ firebase.initializeApp(firebaseConfig);
   userImage.append(userPic);
 
   var request = new XMLHttpRequest()
-   request.open('GET', 'https://api.zenhub.io/p2/workspaces?access_token=' + token, true)
+   request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
    request.onload = function() {
      // Begin accessing JSON data here
      var data = JSON.parse(this.response)
