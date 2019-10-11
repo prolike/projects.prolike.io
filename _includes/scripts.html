@@ -51,26 +51,34 @@ firebase.initializeApp(firebaseConfig);
   var userEmail = document.querySelector("#user-email");
   userEmail.innerHTML = user.email;
 
+  'use strict';
 
-  const express = require('express');
+  // ------------------------------------------------------------------------------------------ Dependencies
 
-  const app = express();
+  var fetch = require('node-fetch');
+  var fs = require('fs');
+  var winston = require("./winston")
+  var logger = winston.logger();
+  // ------------------------------------------------------------------------------------------ Module Exposure
 
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
+  const url = "http://localhost:5000/v1/add";
+          const other = {
+              method: "POST",
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ issue: issueID.value, start_time: res1.value, end_time: res2.value, username: 'davidcarl' })
+          };
+          fetch(url, other)
+              .then(function (response) {
+                  return response.json();
+              })
+              .then(function (myJson) {
+                    console.log(issueID.value)
+              });
 
-  var request = new XMLHttpRequest()
-  request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
-  request.onload = function() {
-    // Begin accessing JSON data here
-    var data = JSON.parse(this.response)
 
-  }
-  request.setRequestHeader('Content-Type', 'application/json')
-  request.send()
-console.log(data);
 alert("hello");
   // ...
   }).catch(function(error) {
