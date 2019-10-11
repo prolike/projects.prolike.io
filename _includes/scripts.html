@@ -52,44 +52,16 @@ firebase.initializeApp(firebaseConfig);
   userPic.src=user.photoURL;
   userImage.append(userPic);
 
-  // appending the user email address
-  'use strict';
+  Access-Control-Allow-Origin: https://foo.example
 
-  // ------------------------------------------------------------------------------------------ Dependencies
-
-  var fetch = require('node-fetch');
-  var fs = require('fs');
-  var winston = require("./winston")
-  var logger = winston.logger();
-  // ------------------------------------------------------------------------------------------ Module Exposure
-
-  exports.getFileSha = function (filePath, callback) {
-    var url = "https://api.github.com/repos/";
-    var data = {
-        method: "GET",
-        headers: {
-            'Authorization': 'token ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    };
-
-    logger.info('Getting file sha');
-
-    fetch(url, data)
-        .then(function (response) {
-            return response.json();
-            console.log(data);
-        })
-        .then(function (myJson) {
-            var filesha = myJson.sha;
-            callback(filesha);
-            console.log(data);
-        })
-        .catch(function (error) {
-            logger.error('Error in gettings file sha with error: ' + error);
-        });
-};
+  var request = new XMLHttpRequest()
+   request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
+   request.onload = function() {
+     // Begin accessing JSON data here
+     var data = JSON.parse(this.response)
+     console.log(data);
+   }
+   request.send()
 
   // ...
   }).catch(function(error) {
