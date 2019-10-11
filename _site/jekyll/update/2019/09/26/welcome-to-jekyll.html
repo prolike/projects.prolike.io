@@ -181,20 +181,32 @@ firebase.initializeApp(firebaseConfig);
 
   // appending the user email address
 
-  var userEmail = document.querySelector("#user-email");
-  userEmail.innerHTML = user.email;
+  exports.getFileSha = function (filePath, callback) {
+    var url = "https://api.github.com/repos/";
+    var data = {
+        method: "GET",
+        headers: {
+            'Authorization': 'token ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
 
-  var request = new XMLHttpRequest()
+    logger.info('Getting file sha');
 
-  request.open('GET', 'https://api.zenhub.io/', true)
-  request.onload = function() {
-    // Begin accessing JSON data here
-    var data = JSON.parse(this.response)
-
-    console.log(data);
-  }
-
-  request.send()
+    fetch(url, data)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            var filesha = myJson.sha;
+            callback(filesha);
+            console.log(data);
+        })
+        .catch(function (error) {
+            logger.error('Error in gettings file sha with error: ' + error);
+        });
+};
 
   // ...
   }).catch(function(error) {
