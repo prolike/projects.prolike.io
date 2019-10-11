@@ -51,14 +51,6 @@ firebase.initializeApp(firebaseConfig);
   var userEmail = document.querySelector("#user-email");
   userEmail.innerHTML = user.email;
 
-  'use strict';
-
-  // ------------------------------------------------------------------------------------------ Dependencies
-
-  var fetch = require('node-fetch');
-  var fs = require('fs');
-  var winston = require("./winston")
-  // ------------------------------------------------------------------------------------------ Module Exposure
 
   const url = "http://api.github.com/user/repos?token=" + token;
           const other = {
