@@ -34,18 +34,23 @@ firebase.initializeApp(firebaseConfig);
   // This gives you a GitHub Access Token. You can use it to access the GitHub API.
   var token = result.credential.accessToken;
   console.log(token);
+
   // The signed-in user info.
   var user = result.user;
   console.log(user);
   console.log(user.email);
   var userImage = document.querySelector("#user-image");
+
   // appending the user profile image
+
   var userPic = document.createElement("img");
   userPic.src=user.photoURL;
   userImage.append(userPic);
+
   // appending the user email address
   var userEmail = document.querySelector("#user-email");
   userEmail.innerHTML = user.email;
+
   var request = new XMLHttpRequest()
   request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
   request.onload = function() {
@@ -53,7 +58,9 @@ firebase.initializeApp(firebaseConfig);
     var data = JSON.parse(this.response)
     console.log(data);
   }
+  request.setRequestHeader('Content-Type', 'application/json')
   request.send()
+  
   // ...
   }).catch(function(error) {
   // Handle Errors here.
