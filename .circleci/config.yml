@@ -132,15 +132,6 @@ workflows:
               only: /.*/
             branches:
               only: /.*/
-      - html-proofer-extended: # Run more tests in parallel
-          requires:
-            - prep-repo
-            - jekyll-build
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              only: /.*/
       - deliver: # Push the target branch to remote - only when all is good and only on ready branches
           requires:
             - prep-repo
