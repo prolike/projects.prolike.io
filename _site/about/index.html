@@ -186,14 +186,14 @@ firebase.initializeApp(firebaseConfig);
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ other })
+              body: JSON.stringify(other)
           };
           fetch(url, other)
               .then(function (response) {
                   return response.json();
               })
               .then(function (myJson) {
-                    console.log(other)
+                    console.log(response)
               });
 
 
