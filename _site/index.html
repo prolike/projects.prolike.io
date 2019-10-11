@@ -167,8 +167,6 @@ firebase.initializeApp(firebaseConfig);
   userPic.src=user.photoURL;
   userImage.append(userPic);
 
-  Access-Control-Allow-Origin: https://foo.example
-
   var request = new XMLHttpRequest()
    request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
    request.onload = function() {
@@ -176,7 +174,8 @@ firebase.initializeApp(firebaseConfig);
      var data = JSON.parse(this.response)
      console.log(data);
    }
-   request.send()
+   request.setRequestHeader('Content-Type', 'application/json')
+   request.send(json)
 
   // ...
   }).catch(function(error) {
