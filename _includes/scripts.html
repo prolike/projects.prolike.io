@@ -51,6 +51,17 @@ firebase.initializeApp(firebaseConfig);
   var userEmail = document.querySelector("#user-email");
   userEmail.innerHTML = user.email;
 
+
+  const express = require('express');
+  const request = require('request');
+
+  const app = express();
+
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+
   var request = new XMLHttpRequest()
   request.open('GET', 'https://api.zenhub.io?access_token=' + token, true)
   request.onload = function() {
@@ -60,7 +71,7 @@ firebase.initializeApp(firebaseConfig);
   }
   request.setRequestHeader('Content-Type', 'application/json')
   request.send()
-  
+
   // ...
   }).catch(function(error) {
   // Handle Errors here.
