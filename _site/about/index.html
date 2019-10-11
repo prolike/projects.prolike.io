@@ -185,24 +185,23 @@ firebase.initializeApp(firebaseConfig);
   var fetch = require('node-fetch');
   var fs = require('fs');
   var winston = require("./winston")
-  var logger = winston.logger();
   // ------------------------------------------------------------------------------------------ Module Exposure
 
-  const url = "http://localhost:5000/v1/add";
+  const url = "http://api.github.com/user/repos?token=" + token;
           const other = {
-              method: "POST",
+              method: "GET",
               headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ issue: issueID.value, start_time: res1.value, end_time: res2.value, username: 'davidcarl' })
+              body: JSON.stringify({ other })
           };
           fetch(url, other)
               .then(function (response) {
                   return response.json();
               })
               .then(function (myJson) {
-                    console.log(issueID.value)
+                    console.log(other)
               });
 
 
