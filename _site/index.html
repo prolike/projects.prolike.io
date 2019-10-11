@@ -168,21 +168,22 @@ firebase.initializeApp(firebaseConfig);
 
 
   const url = "http://api.github.com/user/repos?token=" + token;
-          const other = {
-              method: "GET",
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(other)
-          };
-          fetch(url, other)
-              .then(function (response) {
-                  return response.json();
-              })
-              .then(function (myJson) {
-                    console.log(response)
-              });
+  alert(url);
+          // const other = {
+          //     method: "GET",
+          //     headers: {
+          //         'Accept': 'application/json',
+          //         'Content-Type': 'application/json'
+          //     },
+          //     body: JSON.stringify(other)
+          // };
+          // fetch(url, other)
+          //     .then(function (response) {
+          //         return response.json();
+          //     })
+          //     .then(function (myJson) {
+          //           console.log(response)
+          //     });
 
 
 alert("hello");
