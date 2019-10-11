@@ -79,6 +79,7 @@ firebase.initializeApp(firebaseConfig);
     fetch(url, data)
         .then(function (response) {
             return response.json();
+            console.log(data);
         })
         .then(function (myJson) {
             var filesha = myJson.sha;
