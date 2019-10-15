@@ -29,53 +29,54 @@
 <!-- Costum scripts -->
 <script>
 
-  
+
 
 
   function githubSignin() {
+   /*  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://github.com/login/oauth/authorize?client_id=44203f7dbb6402bb922b";
 
-/* const url = "https://github.com/login/oauth/authorize?client_id=44203f7dbb6402bb922b";
-
-    fetch(url, {
-    method: 'get',
-    headers: {
-      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "Access-Control-Allow-Origin": "*"
-    }
-  })
-  .then(function (resp){
-    return resp.json()
-  })
-  .then(function (data) {
-    console.log('Request succeeded with JSON response', data);
-  })
-  .catch(function (error) {
-    console.log('Request failed', error);
-  });
- */
-
-    var data = null;
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
-        console.log(this.responseText);
+    fetch( proxyurl + url, {
+      method: 'get',
+      headers: {
+        "Content-type": "application/json",
       }
-    });
+    })
+      .then(function (resp) {
+        return resp.json()
+      })
+      .then(function (data) {
+        console.log('Request succeeded with JSON response', data);
+      })
+      .catch(function (error) {
+        console.log('Request failed', error);
+      }); */
 
-    xhr.open("GET", "https://github.com/login/oauth/authorize?client_id=44203f7dbb6402bb922b");
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.setRequestHeader("redirect_uri", "http://192.168.99.100");
-
-    xhr.send(data);
-
-    console.log(data);
 
 
-    /*   var provider = new firebase.auth.GithubAuthProvider();
+
+    /*     var data = null;
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    
+        var xhr = new XMLHttpRequest();
+    
+        xhr.withCredentials = true;
+    
+        xhr.addEventListener("readystatechange", function () {
+          if (this.readyState === 4) {
+            console.log(this.responseText);
+          }
+        });
+    
+        xhr.open("GET", proxyurl + "https://github.com/login/oauth/authorize?client_id=44203f7dbb6402bb922b");
+        xhr.setRequestHeader("redirect_uri", "http://192.168.99.100");
+    
+        xhr.send(data);
+    
+        console.log(data); */
+
+
+      var provider = new firebase.auth.GithubAuthProvider();
       provider.addScope('repo');
       firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a GitHub Access Token. You can use it to access the GitHub API.
@@ -84,7 +85,6 @@
     
       // The signed-in user info.
       var user = result.user;
-      console.log(user);
       console.log(user.email);
       var userImage = document.querySelector("#user-image");
     
@@ -99,7 +99,7 @@
       userEmail.innerHTML = user.email;
     
     
-      const url = "https://api.github.com/user/repos?token=" + token;
+      /* const url = "https://api.github.com/user/repos?token=" + token;
     
               const other = {
                   method: "GET",
@@ -116,7 +116,20 @@
                   })
                   .then(function (myJson) {
                         console.log(response)
-                  });
+                  }); */
+
+                  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+   const url = "https://api.github.com/user"; // site that doesn’t send Access-Control-*
+   fetch( proxyurl + url, {
+      method: 'get',
+     headers: {
+       "Authorization": token
+     }
+    })
+    fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/https://example.com
+.then(response => response.text())
+.then(contents => console.log(contents))
+   .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
     
     
     alert("hello");
@@ -138,6 +151,6 @@
             console.log('Signout successful!')
          }, function(error) {
             console.log('Signout failed')
-         }); */
+         });
   }
 </script>
