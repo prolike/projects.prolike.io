@@ -1,16 +1,21 @@
 {
   "hosting": {
+
     "public": "_site",
+
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
-  },
-  "headers": [ {
-    "headers" : [ {
-      "key" : "Access-Control-Allow-Origin",
-      "value" : "*"
-    } ]
-  } ]
+    ],
+
+    "headers": [ {
+      "source": "**",
+      "headers": [ {
+        "key": "Access-Control-Allow-Origin",
+        "value": "*"
+      } ]
+    }]
+
+  }
 }
