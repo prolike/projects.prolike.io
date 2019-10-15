@@ -250,7 +250,7 @@ To add new posts, simply add a file in the <code class="highlighter-rouge">_post
    fetch( proxyurl + url, {
       method: 'get',
      headers: {
-       "Authorization": token
+       "Authorization": "access_token=" + token,
      }
     })
     fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/https://example.com
