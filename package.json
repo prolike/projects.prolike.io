@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/prolike/projects.prolike.io/issues"
   },
-  "homepage": "https://github.com/prolike/projects.prolike.io#readme"
+  "homepage": "https://github.com/prolike/projects.prolike.io#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "request": "^2.88.0"
+  }
 }
