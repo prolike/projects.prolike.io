@@ -1,0 +1,33 @@
+[debug] [2019-10-16T12:22:38.276Z] ----------------------------------------------------------------------
+[debug] [2019-10-16T12:22:38.277Z] Command:       /usr/local/Cellar/node/12.12.0/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2019-10-16T12:22:38.277Z] CLI Version:   7.6.0
+[debug] [2019-10-16T12:22:38.277Z] Platform:      darwin
+[debug] [2019-10-16T12:22:38.277Z] Node Version:  v12.12.0
+[debug] [2019-10-16T12:22:38.284Z] Time:          Wed Oct 16 2019 14:22:38 GMT+0200 (Centraleuropæisk sommertid)
+[debug] [2019-10-16T12:22:38.284Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-16T12:22:38.291Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-16T12:22:38.292Z] > authorizing via signed-in user
+[info] i  Starting emulators: ["hosting"]
+[debug] [2019-10-16T12:22:38.304Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-10-16T12:22:38.305Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-10-16T12:22:38.623Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-16T12:22:38.635Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/projects-prolike/webApps/-/config  
+ 
+[debug] [2019-10-16T12:22:39.433Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: _site
+[info] ✔  hosting: Local server: http://localhost:5000
+[info] ✔  hosting: Emulator started at http://localhost:5000
+[info] ✔  All emulators started, it is now safe to connect.
+[debug] [2019-10-16T12:27:49.748Z] Error: write EIO
+    at afterWriteDispatched (internal/stream_base_commons.js:150:25)
+    at writeGeneric (internal/stream_base_commons.js:141:3)
+    at WriteStream.Socket._writeGeneric (net.js:770:11)
+    at WriteStream.Socket._write (net.js:782:8)
+    at doWrite (_stream_writable.js:431:12)
+    at writeOrBuffer (_stream_writable.js:415:5)
+    at WriteStream.Writable.write (_stream_writable.js:305:11)
+    at Array.logRequest (/usr/local/lib/node_modules/firebase-tools/node_modules/morgan/index.js:130:14)
+    at listener (/usr/local/lib/node_modules/firebase-tools/node_modules/on-finished/index.js:169:15)
+    at onFinish (/usr/local/lib/node_modules/firebase-tools/node_modules/on-finished/index.js:100:5)
