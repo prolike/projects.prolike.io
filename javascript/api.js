@@ -1,3 +1,6 @@
+
+'use strict';
+var token;
 var githubCode = window.location.href;
 var urlCode = new URL(githubCode)
 var ghCode = urlCode.searchParams.get("code");
@@ -5,23 +8,56 @@ var ghCode = urlCode.searchParams.get("code");
 var clientID = "44203f7dbb6402bb922b"
 var clientSecret = "8f820f0af6d38f1a6945bafa6184b3e3d6ede080"
 
-var data = null;
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    
-        var xhr = new XMLHttpRequest();
-    
-        xhr.addEventListener("readystatechange", function () {
-          if (this.readyState === 4) {
-            console.log(this.responseText);
-          }
-        });
-    
-        xhr.open("GET", proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, true);
-        xhr.setRequestHeader("Accept", "application/json");
-    
-        xhr.send(data);
-    
-        console.log(data);
+
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode;
+
+    fetch( proxyurl + url, {
+      method: 'post',
+      headers: {
+        "Accept": "application/json",
+      }
+    })
+      .then(function (resp) {
+        return resp.json()
+
+      })
+      .then(function (data) {
+            var token_data = JSON.parse(data);
+    var token = token_data.access_token;
+    console.log(token);
+        
+      })
+      .catch(function (error) {
+        console.log('Request failed', error);
+      });
+
+console.log(token);
+/* var data = null;
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, true);
+xhr.setRequestHeader("Accept", "application/json");
+
+
+
+var prom = new Promise(function(resolve,reject) {
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            resolve(this.responseText);
+        }
+    }
+});
+prom.then(function(data) {
+    console.log(data);
+    var token = data.access_token;
+});
+
+xhr.send(data);
+
+console.log(token); */
+
 
 /* const proxyurl = "https://cors-anywhere.herokuapp.com/";
 var requestToken = new XMLHttpRequest()
@@ -32,7 +68,7 @@ requestToken.onload = function () {
 
   var data = JSON.parse(this.response) */
 
-  /* const token = data.get("access_token") */
+/* const token = data.get("access_token") */
 
 /* token = data.access_token;
 }
@@ -40,7 +76,7 @@ requestToken.onload = function () {
 requestToken.send()
 console.log(token); */
 
-/* 
+/*
   const proxyurl = "https://cors-anywhere.herokuapp.com/";
   var requestRepos = new XMLHttpRequest()
   requestRepos.open('GET', proxyurl + 'https://api.github.com/user/repos', true)
@@ -83,7 +119,7 @@ console.log(token); */
       })
       }
 
-      
+
 
       else {
         document.querySelector("#titel").innerHTML = "No workspace";
