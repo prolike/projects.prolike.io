@@ -9,75 +9,25 @@ var clientID = "44203f7dbb6402bb922b"
 var clientSecret = "8f820f0af6d38f1a6945bafa6184b3e3d6ede080"
 
 
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode;
 
-    fetch( proxyurl + url, {
-      method: 'post',
-      headers: {
-        "Accept": "application/json",
-      }
-    })
-      .then(function (resp) {
-        return resp.json()
-
-      })
-      .then(function (data) {
-            var token_data = JSON.parse(data);
-    var token = token_data.access_token;
-    console.log(token);
-        
-      })
-      .catch(function (error) {
-        console.log('Request failed', error);
-      });
-
-console.log(token);
-/* var data = null;
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
-
-var xhr = new XMLHttpRequest();
-xhr.open("GET", proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, true);
-xhr.setRequestHeader("Accept", "application/json");
-
-
-
-var prom = new Promise(function(resolve,reject) {
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            resolve(this.responseText);
-        }
-    }
-});
-prom.then(function(data) {
-    console.log(data);
-    var token = data.access_token;
-});
-
-xhr.send(data);
-
-console.log(token); */
-
-
-/* const proxyurl = "https://cors-anywhere.herokuapp.com/";
 var requestToken = new XMLHttpRequest()
-requestToken.open('POST', proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, true)
+requestToken.open('POST', proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, false)
 requestToken.setRequestHeader("Accept", "application/json")
 var token
 requestToken.onload = function () {
 
-  var data = JSON.parse(this.response) */
+  var data = JSON.parse(this.response)
 
 /* const token = data.get("access_token") */
 
-/* token = data.access_token;
+token = data.access_token;
 }
 
 requestToken.send()
-console.log(token); */
+console.log(token);
 
-/*
-  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+
   var requestRepos = new XMLHttpRequest()
   requestRepos.open('GET', proxyurl + 'https://api.github.com/user/repos', true)
   requestRepos.setRequestHeader("Authorization", " token " + token)
@@ -128,4 +78,3 @@ console.log(token); */
 
     requestBoard.send()
   }
- */
