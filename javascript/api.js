@@ -1,5 +1,5 @@
 
-'use strict';
+/* 'use strict';
 var token;
 var githubCode = window.location.href;
 var urlCode = new URL(githubCode)
@@ -26,14 +26,16 @@ const proxyurl = "https://cors-anywhere.herokuapp.com/";
             var token_data = JSON.parse(data);
     var token = token_data.access_token;
     console.log(token);
-        
+            return token;
       })
+
+
       .catch(function (error) {
         console.log('Request failed', error);
       });
-
-console.log(token);
-/* var data = null;
+ */
+var token = await fetch();
+var data = null;
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
 var xhr = new XMLHttpRequest();
@@ -56,7 +58,7 @@ prom.then(function(data) {
 
 xhr.send(data);
 
-console.log(token); */
+console.log(token);
 
 
 /* const proxyurl = "https://cors-anywhere.herokuapp.com/";
