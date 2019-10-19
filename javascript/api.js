@@ -1,80 +1,80 @@
 
+
 'use strict';
 var token;
 var githubCode = window.location.href;
 var urlCode = new URL(githubCode)
 var ghCode = urlCode.searchParams.get("code");
-
-var clientID = "44203f7dbb6402bb922b"
-var clientSecret = "8f820f0af6d38f1a6945bafa6184b3e3d6ede080"
-
-
-
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
-var requestToken = new XMLHttpRequest()
-requestToken.open('POST', proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode, false)
-requestToken.setRequestHeader("Accept", "application/json")
-var token
-requestToken.onload = function () {
+
+if (ghCode == null) {
+  window.location.replace("/");
+}
+
+else {
+
+
+  var clientID = "44203f7dbb6402bb922b"
+  var clientSecret = "8f820f0af6d38f1a6945bafa6184b3e3d6ede080"
+  var siteurl = "http://192.168.99.100"
+  var redirect_url = siteurl + "/login/"
+
+  var data;
+
+  var requestToken = new XMLHttpRequest()
+  requestToken.open('POST', proxyurl + 'https://github.com/login/oauth/access_token?client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + ghCode + '&redirect_uri=' + redirect_url, false)
+  requestToken.setRequestHeader("Accept", "application/json")
+  var token;
+  requestToken.onload = function () {
+
+    var data = JSON.parse(this.response)
+    if (requestToken.status >= 200 && requestToken.status < 400) {
+
+    } else {
+      window.location.replace("/");
+    }
+
+    token = data.access_token;
+  }
+
+  requestToken.send()
+
+}
+
+
+var getOrg = new XMLHttpRequest()
+getOrg.open('GET', proxyurl + "https://api.github.com/user/orgs", false)
+getOrg.setRequestHeader("Authorization", " token " + token)
+var org_array = [];
+getOrg.onload = function () {
 
   var data = JSON.parse(this.response)
 
-/* const token = data.get("access_token") */
+  data.forEach(org => {
 
-token = data.access_token;
+    org_array.push(org.login);
+
+  })
+
 }
 
-requestToken.send()
-console.log(token);
 
+getOrg.send()
 
-  var requestRepos = new XMLHttpRequest()
-  requestRepos.open('GET', proxyurl + 'https://api.github.com/user/repos', true)
-  requestRepos.setRequestHeader("Authorization", " token " + token)
-  requestRepos.onload = function () {
+if (org_array.indexOf("Prolike-io") !== -1) {
+  sessionStorage.setItem("user_t", token);
+  sessionStorage.setItem("user", "user");
 
-    var data = JSON.parse(this.response)
-    if (requestRepos.status >= 200 && requestRepos.status < 400) {
-      data.forEach(movie => {
-        console.log(movie.name);
-        var btn = document.createElement("BUTTON");
-        btn.innerHTML = movie.name;
-        btn.setAttribute("onclick", "getBoard(" + movie.id + ")");
-        document.body.appendChild(btn);
-      })
-    } else {
-      const errorMessage = document.createElement('marquee')
-      errorMessage.textContent = `Gah, it's not working!`
-      app.appendChild(errorMessage)
-    }
+  if (token == null) {
+    window.location.replace("/");
+  } else {
+
+    window.location.replace("/board/");
   }
-
-  requestRepos.send()
-
-
-  function getBoard(repoId) {
-    var requestBoard = new XMLHttpRequest()
-    requestBoard.open('GET', proxyurl + 'https://api.zenhub.io/p2/repositories/' + repoId + '/workspaces', true)
-    requestBoard.setRequestHeader("X-Authentication-Token", "aa02c7e3618a31f77e2b94998cd87805b65258aac1542e1e97ae700a2e399b9b98ff80603b690bd7")
-    requestBoard.onload = function () {
-      var data = JSON.parse(this.response)
-      if (requestBoard.status >= 200 && requestBoard.status < 400) {
-        console.log(data);
-
-        data.forEach(board => {
-        console.log(board.name);
-        var btn2 = document.createElement("BUTTON");
-        btn2.innerHTML = board.name;
-        document.body.appendChild(btn2);
-      })
-      }
+} else {
+  window.location.replace("/noaccess/");
+}
 
 
 
-      else {
-        document.querySelector("#titel").innerHTML = "No workspace";
-      }
-    }
 
-    requestBoard.send()
-  }
