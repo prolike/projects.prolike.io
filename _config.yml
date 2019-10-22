@@ -22,3 +22,15 @@ markdown: kramdown
 
 exclude:
   - node_modules/
+
+collections:
+  costumers:
+    output: true
+    permalink: /boards/:title/
+
+defaults:
+  -
+    scope:
+      type: costumers
+    values:
+      layout: costumer

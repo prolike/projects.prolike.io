@@ -1,5 +1,6 @@
 ---
 title: Board
-layout: board
+layout: boards
 ---
-hhh
+
+Hej

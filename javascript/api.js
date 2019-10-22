@@ -69,7 +69,7 @@ if (org_array.indexOf("Prolike-io") !== -1) {
     window.location.replace("/");
   } else {
 
-    window.location.replace("/board/");
+    window.location.replace("/boards/");
   }
 } else {
   window.location.replace("/noaccess/");
