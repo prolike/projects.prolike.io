@@ -89,7 +89,6 @@ function showBoard(repo_name) {
    
     var name = repo_name.replace(/[^\w\s]/gi, '')
     window.location.replace("/boards/" + name + "/");
-    sessionStorage.setItem("repo", repo_name);
 
     
 }

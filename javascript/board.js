@@ -1,15 +1,26 @@
 'use strict';
+
+// Check if there is a user logged in
+
 if (sessionStorage.getItem("user") == null) {
     window.location.replace("/");
 }
 
+// get the sessioned profile image
+
+document.querySelector(".profile-picture").src = sessionStorage.getItem('user-img');
+
+
+
 var token = sessionStorage.getItem("user_t");
-var repo_name = sessionStorage.getItem("repo");
+var repo_name = document.querySelector(".cost-name").innerHTML;
 
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
 var zenhub_token = "aa02c7e3618a31f77e2b94998cd87805b65258aac1542e1e97ae700a2e399b9b98ff80603b690bd7";
 
+
+// Get repo id
 var getSRepos = new XMLHttpRequest()
 var repo_id;
 getSRepos.open('GET', proxyurl + 'https://api.github.com/repos/prolike/' + repo_name, false)
@@ -31,25 +42,96 @@ getSRepos.onload = function () {
 
 getSRepos.send()
 
+// get the workspaces related to the selected repo.
 
+var getWorkspaces = new XMLHttpRequest()
+getWorkspaces.open('GET', proxyurl + 'https://api.zenhub.io/p2/repositories/' + repo_id + '/workspaces', false)
+getWorkspaces.setRequestHeader("X-Authentication-Token", zenhub_token)
 
-var requestBoard = new XMLHttpRequest()
-requestBoard.open('GET', proxyurl + 'https://api.zenhub.io/p2/repositories/' + repo_id + '/workspaces', true)
-requestBoard.setRequestHeader("X-Authentication-Token", zenhub_token)
+var workspaceArray = [];
 
-requestBoard.onload = function () {
+getWorkspaces.onload = function () {
     var data = JSON.parse(this.response)
-    if (requestBoard.status >= 200 && requestBoard.status < 400) {
-        console.log(data);
+    if (getWorkspaces.status >= 200 && getWorkspaces.status < 400) {
+        data.forEach(workspace => {
 
+            workspaceArray.push(workspace.id);
+
+        })
     }
-
-
-
     else {
-
-
     }
 }
 
-requestBoard.send()
+getWorkspaces.send()
+
+// Get all issues from all workspaces out in a json var
+
+var allIssues = [];
+var allpipelines = [];
+workspaceArray.forEach(getWorkspace);
+
+function getWorkspace(value) {
+    var getPipeline = new XMLHttpRequest()
+    getPipeline.open('GET', proxyurl + 'https://api.zenhub.io/p2/workspaces/' + value + '/repositories/' + repo_id + '/board', false)
+    getPipeline.setRequestHeader("X-Authentication-Token", zenhub_token)
+
+    getPipeline.onload = function () {
+        var data = JSON.parse(this.response)
+        if (getPipeline.status >= 200 && getPipeline.status < 400) {
+           console.log(data)
+           data.pipelines.forEach(pipeline => {
+
+            var issueEstimates = [];
+            pipeline.issues.forEach(issue => {
+                if (issue.estimate != undefined) {
+                issueEstimates.push(issue.estimate.value);
+                }
+
+            })
+
+            var summedEstimates = sum( issueEstimates );
+                
+                function sum( obj ) {
+                    var sum = 0;
+                    for( var el in obj ) {
+                      if( obj.hasOwnProperty( el ) ) {
+                        sum += parseFloat( obj[el] );
+                      }
+                    }
+                    return sum;
+                  }
+
+            
+            var pipelineItem = document.createElement("DIV");
+
+
+
+            var text = '<h3>' + pipeline.name + " " + pipeline.issues.length + ' Estimates: ' + summedEstimates + '</h3>';
+            pipelineItem.innerHTML = text;
+            
+            pipelineItem.setAttribute('class', "pipeline")
+            document.querySelector(".pipeline-box").appendChild(pipelineItem);
+
+
+
+            pipeline.issues.forEach(issue => {
+                allIssues.push(issue);
+            } )
+
+        })
+        
+        }
+
+        else {
+        }
+    }
+
+    getPipeline.send()
+}
+
+console.log(allIssues)
+console.log(allpipelines)
+
+
+
