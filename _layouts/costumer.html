@@ -7,8 +7,17 @@ layout: default
 {{ content }}
 
 <img class="profile-picture" src="#">
+<div class="new-issue-box">
+        <p>Last opened issue:</p>
+        <h2 class="ni-number">#</h2>
+        <h3 class="ni-title"></h3>
+        <p>Created on <span class="ni-time"></span> by <span class="ni-cont"></span></p>
+        <a target="_blank" class="ni-link" href="#">View on Github</a>
+    </div>
 
 <div class="pipeline-box"></div>
+
+
 
 
 {% include scripts.html %}

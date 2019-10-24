@@ -49,6 +49,7 @@ getWorkspaces.open('GET', proxyurl + 'https://api.zenhub.io/p2/repositories/' + 
 getWorkspaces.setRequestHeader("X-Authentication-Token", zenhub_token)
 
 var workspaceArray = [];
+var repoArray = [];
 
 getWorkspaces.onload = function () {
     var data = JSON.parse(this.response)
@@ -56,6 +57,10 @@ getWorkspaces.onload = function () {
         data.forEach(workspace => {
 
             workspaceArray.push(workspace.id);
+            
+            workspace.repositories.forEach(repo => {
+                repoArray.push(repo)
+            })
 
         })
     }
@@ -65,7 +70,7 @@ getWorkspaces.onload = function () {
 
 getWorkspaces.send()
 
-// Get all issues from all workspaces out in a json var
+// Get all issues and pipelines from all workspaces out in a json var
 
 var allIssues = [];
 var allpipelines = [];
@@ -131,7 +136,41 @@ function getWorkspace(value) {
 }
 
 console.log(allIssues)
-console.log(allpipelines)
+console.log(repoArray)
+
+var newestIssues = new XMLHttpRequest()
+newestIssues.open('GET', proxyurl + 'https://api.github.com/repos/prolike/' + repo_name + '/issues?sort=created', false)
+newestIssues.setRequestHeader("Authorization", " token " + token)
+
+var newissueDate;
+
+newestIssues.onload = function () {
+    var data = JSON.parse(this.response)
+    if (newestIssues.status >= 200 && newestIssues.status < 400) {
+     
+        document.querySelector(".ni-number").innerHTML += data[0].number;
+        document.querySelector(".ni-title").innerHTML = data[0].title;
+newissueDate = data[0].created_at;
+
+        
+        document.querySelector(".ni-cont").innerHTML = data[0].user.login;
+        document.querySelector(".ni-link").href = data[0].html_url;
+    }
+    else {
+    }
+}
+
+newestIssues.send()
+
+var dateOptions = {year:'numeric', month:'short', day:'numeric'};
+
+var newdate = new Date(newissueDate);
+
+var formatedNewissueDate = newdate.toLocaleDateString("en-GB", + dateOptions);
+
+document.querySelector(".ni-time").innerHTML = formatedNewissueDate;
+
+
 
 
 
