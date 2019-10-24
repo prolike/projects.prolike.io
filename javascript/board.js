@@ -138,6 +138,8 @@ function getWorkspace(value) {
 console.log(allIssues)
 console.log(repoArray)
 
+// Get newest open issue
+
 var newestIssues = new XMLHttpRequest()
 newestIssues.open('GET', proxyurl + 'https://api.github.com/repos/prolike/' + repo_name + '/issues?sort=created', false)
 newestIssues.setRequestHeader("Authorization", " token " + token)
@@ -169,6 +171,42 @@ var newdate = new Date(newissueDate);
 var formatedNewissueDate = newdate.toLocaleDateString("en-GB", + dateOptions);
 
 document.querySelector(".ni-time").innerHTML = formatedNewissueDate;
+
+
+// get newest 'closed' issue
+
+var newestClosedIssue = new XMLHttpRequest()
+newestClosedIssue.open('GET', proxyurl + 'https://api.github.com/repos/prolike/' + repo_name + '/issues?state=closed&sort=updated', false)
+newestClosedIssue.setRequestHeader("Authorization", " token " + token)
+
+var newestClosedIssueDate;
+
+newestClosedIssue.onload = function () {
+    var data = JSON.parse(this.response)
+    if (newestClosedIssue.status >= 200 && newestClosedIssue.status < 400) {
+     
+        document.querySelector(".ci-number").innerHTML += data[0].number;
+        document.querySelector(".ci-title").innerHTML = data[0].title;
+        newestClosedIssueDate = data[0].created_at;
+
+        
+        document.querySelector(".ci-cont").innerHTML = data[0].user.login;
+        document.querySelector(".ci-link").href = data[0].html_url;
+    }
+    else {
+    }
+}
+
+newestClosedIssue.send()
+
+var dateOptions = {year:'numeric', month:'short', day:'numeric'};
+
+var old_date = new Date(newestClosedIssueDate);
+
+var formatedNewissueDate = old_date.toLocaleDateString("en-GB", + dateOptions);
+
+document.querySelector(".ci-time").innerHTML = formatedNewissueDate;
+
 
 
 
