@@ -73,8 +73,9 @@ getWorkspaces.send()
 
 // Get all issues and pipelines from all workspaces out in a json var
 
-var allIssues = [];
+var allIssuesInTodoandUpnext = [];
 var allpipelines = [];
+var allIssuesInToDo = []
 workspaceArray.forEach(getWorkspace);
 
 function getWorkspace(value) {
@@ -86,6 +87,7 @@ function getWorkspace(value) {
         var data = JSON.parse(this.response)
         if (getPipeline.status >= 200 && getPipeline.status < 400) {
             data.pipelines.forEach(pipeline => {
+                allpipelines.push(pipeline);
 
                 var issueEstimates = [];
                 pipeline.issues.forEach(issue => {
@@ -118,15 +120,24 @@ function getWorkspace(value) {
                 pipelineItem.setAttribute('class', "pipeline")
                 document.querySelector(".pipeline-box").appendChild(pipelineItem);
 
+                var pipelinename = pipeline.name;
+                var pipelinenametoLower = pipelinename.toLowerCase();
 
 
-                if (pipeline.name == "To do") {
+                if ( pipelinenametoLower == "to do" || pipelinenametoLower == "up next") {
                     pipeline.issues.forEach(issue => {
-                        allIssues.push(issue);
+                        allIssuesInTodoandUpnext.push(issue);
                     })
                 }
+
+                if (pipelinenametoLower == "to do") {
+                    pipeline.issues.forEach(issue => {
+                        allIssuesInToDo.push(issue);
+                    })
+                }
+
+                
             })
-            allIssues.slice(0, 2);
         }
 
         else {
@@ -135,7 +146,6 @@ function getWorkspace(value) {
 
     getPipeline.send()
 }
-
 
 
 
@@ -243,8 +253,6 @@ var cutContrubutors = getMostconstributes.slice(0, 3);
 //list contributors
 
 
-console.log(cutContrubutors);
-
 cutContrubutors.forEach(contributor => {
     var contributorbox = document.createElement("DIV")
     var cont_pic = document.createElement("IMG");
@@ -265,3 +273,54 @@ cutContrubutors.forEach(contributor => {
 
 })
 
+//Get all todo and upnext storypoints
+console.log(allIssuesInTodoandUpnext)
+
+var issueStorypoints = [];
+                allIssuesInTodoandUpnext.forEach(issue => {
+                    if (issue.estimate != undefined) {
+                        issueStorypoints.push(issue.estimate.value);
+                    }
+
+                })
+
+                var summedStorypoints = sum(issueStorypoints);
+
+                function sum(obj) {
+                    var sum = 0;
+                    for (var el in obj) {
+                        if (obj.hasOwnProperty(el)) {
+                            sum += parseFloat(obj[el]);
+                        }
+                    }
+                    return sum;
+                }
+
+
+                console.log(summedStorypoints)
+
+                document.querySelector(".storypoint-number").innerHTML += summedStorypoints.toString();
+
+                // Get all issues in todo
+
+                var cuttedallIssuesInToDo = allIssuesInToDo.slice(0,4);
+
+                 cuttedallIssuesInToDo.forEach(issue => {
+
+                    var getIssueName = new XMLHttpRequest;
+                    getIssueName.open("GET", proxyurl + "https://api.github.com/repos/prolike/" + repo_name + "/issues/" + issue.issue_number, false)
+                    getIssueName.setRequestHeader("Authorization", " token " + token)
+                    var issueName;
+                    getIssueName.onload = function() {
+                        var data = JSON.parse(this.response)
+                        issueName = data.title;
+                    }
+
+                    getIssueName.send()
+
+
+                     var todo_issue = document.createElement("DIV");
+                     var todo_text = "<h3>#" + issue.issue_number + " - " + issueName + " <span class='estimate-icon'>" + issue.estimate.value + "</span></h3>";
+                     todo_issue.innerHTML = todo_text;
+                     document.querySelector(".todo-list").append(todo_issue);
+                 })
